@@ -1,0 +1,23 @@
+<div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="collapsed navbar-toggle" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-6" aria-expanded="false"><span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+        <a href="/wall" class="navbar-brand">WALL</a></div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+        {% if user.is_authenticated %}
+            <ul class="nav pull-right">
+                <li><a class="dropdown-toggle" data-toggle="dropdown"  href="#"><img class="round" src="{{ user.authors.photo }}">{{ user.username }}
+                <span class="caret"></span></a>
+                    <ul class="dropdown-menu"> <li><a href="/logout">Logout</a></li></li> </ul>
+                </li>
+            </ul>
+
+        {% else %}
+        <ul class="nav pull-right">
+            <li><a href="#">Sign in</a></li>
+        </ul>
+        {% endif %}
+
+    </div>
+</div>

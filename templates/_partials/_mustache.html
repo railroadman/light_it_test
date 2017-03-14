@@ -1,0 +1,208 @@
+{% verbatim %}
+<script id="message" type="x-tmpl-mustache">
+    <div class="bs-callout bs-callout-danger message_wrapper" id="message_wrapper_{{ msg_id }}">
+                <div class="media">
+                    <div class="media-left">
+                        <p><img class="round" src="{{ photo_url}}"></p>
+                        <p style="font-size:0.7em">{{ username }}</p>
+                    </div>
+                    <div class="media-body">
+                        <ul style="list-style-type: none">
+                            <li style="content: '';padding-top: 1em;"><b></b></li>
+                            <div id="msg_text_{{ msg_id }}">{{ message }}</div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 col-xs-5 pull-right">
+                                        <a class="do_comment" data-id="{{ msg_id }}" href="#"">Комментировать(0)</a> |
+                                        <a href="#" onclick="javascript:$('#{{ msg_id }}_message').toggle();return false;">
+                                            <i class="fa fa-edit"></i>
+                                        </a>&nbsp;|
+
+                                             <a class="del_msg" data-id="{{ msg_id }}" id="msg_{{ msg_id }}" href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+
+                                    </div>
+                                </div>
+
+                                <div class="row" id="{{ msg_id }}_message" style="display: none;">
+                                    <div class="col-lg-8">
+                                        <form class="form_edit" method="post" action="">
+                                            <textarea name="msg_text" class="form-control" rows="3">{{ message }}</textarea>
+                                            <input type="hidden" name="msg_id" value="{{msg_id }}"></input>
+                                            <input type="hidden" name="parent_id" value="{{msg_id }}"></input>
+                                            <input type="hidden" name="root_parent_id" value="{{ msg_id }}"></input>
+                                            <div class="row col-lg-10">
+                                                <input type="submit" class="btn btn-large btn-primary"
+                                                       value="Add message"></input>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                        </ul>
+                    </div>
+                </div>
+                <div class="comments" style="display:none" id="cmt_wrapper_{{ msg_id }}"></div>
+            </div>
+
+</script>
+
+
+
+<script id="messages" type="x-tmpl-mustache">
+    {{#messages}}
+    <div class="bs-callout bs-callout-danger msg_wrapper" id="msg_wrapper_{{ msg_id }}">
+                <div class="media">
+                    <div class="media-left">
+                        <p><img class="round" src="{{ author_photo}}"></p>
+                        <p style="font-size:0.7em">{{ author_name }}</p>
+                    </div>
+                    <div class="media-body">
+                        <ul style="list-style-type: none">
+                            <li style="content: '';padding-top: 1em;"><b>{{ created_at }}</b>&nbsp;&nbsp; {{ message }}</li>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 col-xs-5 pull-right">
+                                        <a class="do_comment" data-id="{{ msg_id }}" href="#"">Комментировать({{count}})</a> |
+
+                                            {{ #is_owner }}
+                                            <a href="#" onclick="javascript:$('#{{ msg_id }}_message').toggle();return false;"><i class="fa fa-edit"></i></a>
+                                             <a class="del_msg" data-id="{{ msg_id }}" id="msg_{{ msg_id }}" href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                             {{ /is_owner }}
+
+                                    </div>
+                                </div>
+                                <div class="row" id="{{ msg_id }}_message" style="display: none;">
+                                    <div class="col-lg-8">
+                                        <form class="form_edit" method="post" action="">
+                                             <textarea name="msg_text" class="form-control" rows="3">{{ message }}</textarea>
+                                            <input type="hidden" name="msg_id" value="{{msg_id }}"></input>
+                                            <input type="hidden" name="parent_id" value="{{msg_id }}"></input>
+                                            <input type="hidden" name="root_parent_id" value="{{ msg_id }}"></input>
+                                            <div class="row col-lg-10">
+                                                <input type="submit" class="btn btn-large btn-primary"
+                                                       value="Add message"></input>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="comments" style="display:none" id="cmt_wrapper_{{ msg_id }}"></div>
+            </div>
+    {{/messages}}
+
+</script>
+
+<script id="sub_comment" type="x-tmpl-mustache">
+
+
+        {{#childrens}}
+            <div class="media">
+             <div class="media-left">
+            <p><img alt='32x32' class='media-object round' src='{{ photo }}' style='width: 48px; height: 48px;'></img></p>
+            <p style='font-size:0.7em;'>{{ author }}</p>
+        </div>
+        {{>reply_block}}
+
+        {{>recurse}}
+
+        {{/childrens}}
+</div>
+  </div>
+
+</script>
+
+<script id="tree_comments" type="x-tmpl-mustache">
+        {{#user_id}}
+        <form class='reply_form' id="reply_form_{{ msg_id }}">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <input type="hidden" name="msg_id" value="{{ msg_id }}">
+                            <input type="hidden" name="parent_id" value="0">
+                            <textarea style="width:75%" rows="5" name="msg_text"></textarea></div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-xs-6 pull-right"><button class="btn btn-large btn-primary add_comment" type="submit">Reply</button></div>
+                        </div>
+                    </div>
+        </form>
+        <div class="new_comm_wrapper row" >
+            <div class="col-lg-12" id="new_comment_row_{{ msg_id }}">
+            </div>
+        </div>
+        {{/user_id}}
+
+        {{#childrens}}
+         <div class="media">
+        <div class="media-left">
+            <p><img alt='32x32' class='media-object round' data-src='holder.js/32x32'
+            src='{{ photo }}'></img></p>
+            <p style='font-size:0.7em;'>{{ author }}</p>
+        </div>
+            {{>reply_block}}
+            {{>recurse}}
+           </div>
+            </div>
+           </div>
+        {{/childrens}}
+
+
+
+</script>
+
+<script id="reply_comment_block" type="x-tmpl-mustache">
+    <div class="media-body">
+            <ul>
+            <li style="float:left"><b>{{ created_at }}</b>&nbsp;</li><li id="cmnt_text_{{id}}" style="float:left">
+            {{#status}}
+            {{ message }}
+            {{/status}}
+            {{^status }}
+                <span class="badge">{{ message }}</span>
+            {{/status}}
+            </li>
+            </ul>
+            <div class="clearfix"></div>
+            <ul style='list-style-type:none'>
+                <li>
+                <a href="#" onclick="javascript:$('#reply_cmnt_{{ id }}').toggle();return false;">Reply</a>&nbsp;|
+                {{#is_owner}}
+                    <a class="edit_msg" data-id="{{ id }}"  id="edit_cmnt_{{ id }}" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> &nbsp;
+                    <a class="del_msg_cmnt" data-id="{{ id }}" id="del_cmnt_{{ id }}" href="#"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+                {{/is_owner}}
+                <div class="row" id="reply_cmnt_{{ id }}" style="display:none;margin-top:10px;margin-left:15px">
+                    {{#user_id}}
+                    <form class='reply_form' id="reply_form_{{ id }}">
+                    <div class='col-lg-12'>
+                        <div class="row">
+                            <input type='hidden' name='msg_id' value='{{  root_parent_id }}'>
+                            <input type='hidden' name='parent_id' value='{{  id }}'>
+                            <textarea style="width:75%" rows="5" name="msg_text"></textarea>
+                        </div>
+
+                        <div class='row'>
+                            <div class='col-lg-4 col-md-6 col-xs-6 pull-right'><button data-id={{ id }} class='btn btn-large btn-primary' type="submit">Reply</button></div>
+                        </div>
+                    </div>
+                    </form>
+                    {{/user_id}}
+
+                </div>
+            </ul>
+
+
+</script>
+
+<script id="reply_" type="x-tmpl-mustache">
+
+<div class="media">
+        <div class="media-left">
+            <p><img alt='32x32' class='media-object round' data-src='holder.js/32x32'
+            src='{{ photo }}'></img></p>
+            <p style='font-size:0.7em;'>{{ author }}</p>
+        </div>
+    <div class="media-body">
+            <b>{{ created_at }}</b>&nbsp;{{ message }}
+                </div>
+           </div>
+           </div>
+</script>
+{% endverbatim %}

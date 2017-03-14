@@ -1,0 +1,50 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-10">
+        <h4>{{ message.message }}</h4>
+    </div>
+</div>
+
+{% include "_partials/auth_add.html" %}
+
+<div class="row col-lg-10">
+<ul style="list-style-type: none">
+    {% for m in message.comments.all %}
+
+    <li style="content: '';padding-top: 2em;"><font size="-1"><b>{{ m.created_at }}</b> &nbsp (
+                    {% if m.time_ago.days > 1 %}
+                        {{ m.time_ago.days|floatformat:"0"  }} дней
+                    {% elif m.time_ago.hours > 1 %}
+                        {{ m.time_ago.hours|floatformat:"0" }} часов
+                    {% elif m.time_ago.minutes > 1 %}
+                        {{ m.time_ago.minutes|floatformat:"0" }} минут
+                    {% elif m.time_ago.minutes > 0 %}
+                            меньше минуты
+                    {% endif %})</font>&nbsp;{{m.comment_txt}}&nbsp;&nbsp;<i>({{m.author.user.username}})</i>
+        <div class="row">
+
+            <a href="#" onclick="javascript:$('#{{m.id}}_message').toggle();return false;">Reply</a> |
+            {% if user.is_authenticated %}
+                {% if user.authors == m.author %}
+                    <a href="comment/{{ m.id }}/del"><i class="fa fa-times" aria-hidden="true"></i></a>
+                {% endif %}
+            {% endif %}
+            <div class="row" id="{{m.id}}_message" style="display: none;">
+                <form method="post" action="/wall/{{ message.id }}/">
+                     {% csrf_token %}
+                    <textarea name="msg_text" class="form-control" rows="3" placeholder="Textarea"></textarea>
+                    <input type="hidden" name="parent_id" value="{{m.id}}"></input>
+                    <input type="hidden" name="msg_id" value="{{message.id}}"></input>
+                    <div class="row col-lg-10">
+                        <input type="submit" class="btn btn-large btn-primary" value="Add message"></input>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/style.css" %}"></link>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static "js/logger.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/mustache.min.js" %}"></script>
+
+
+
+
+        <title>{{title}}</title>
+
+</head>
+<body style="">
+<div class="container">
+    {% include "_partials/top_nav.html" %}
+    {% block content %}
+
+    {% endblock %}
+    {% include "_partials/_mustache.html" %}
+</div>
+    <script type="text/javascript" src="{% static "js/cookie.js" %}"></script>
+    <script type="text/javascript">
+        {% if user.is_authenticated %}
+            var username = "{{ request.user.username }}";
+            var photo_url = "{{  request.user.authors.photo }}";
+            var user_id = {{ request.user.pk }};
+            var csrftoken = getCookie('csrftoken');
+        {% endif %}
+    </script>
+
+    <script type="text/javascript" src="{% static "js/message.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/comment.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/app.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/tree.js" %}"></script>
+</body>
+</html>

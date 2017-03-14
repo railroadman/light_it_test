@@ -1,0 +1,35 @@
+<div class="row mt20" >
+    {% if user.is_authenticated %}
+        <div class="col-lg-16" data-example-id="textarea-form-control">
+            <form id="add_msg_form" method="post" class="form-inline" action="{{ action_url|default:"/wall/" }}">
+                {% csrf_token %}
+
+                <div class="form-group col-lg-10">
+
+                    <textarea name="msg_text" class="ftarea" rows="10" placeholder="Textarea"></textarea>
+                    <input type="hidden" name="parent_id" value="{{ parent_id|default:"0" }}"></input>
+                    <input type="hidden" name="msg_id" value="{{ message_id|default:"0" }}"></input>
+                </div>
+                <div class="form-group">
+
+                    <button class="btn btn-large btn-primary add_message">Add message</button>
+
+                </div>
+            </form>
+        </div>
+    {% else %}
+
+        <div class="col-lg-16 col-md-16">
+            <ul class="social-network social-circle list-inline text-center">
+
+
+                <li><a href="{% url "social:begin" "twitter" %}" class="icoTwitter" title="Twitter"><i
+                        class="fa fa-twitter"></i></a></li>
+                <li><a href="{% url "social:begin" "google-oauth2" %}" class="icoGoogle" title="Google +"><i
+                        class="fa fa-google-plus"></i></a></li>
+
+            </ul>
+        </div>
+
+    {% endif %}
+</div>
