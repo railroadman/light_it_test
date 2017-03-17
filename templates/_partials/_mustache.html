@@ -163,10 +163,14 @@
             <div class="clearfix"></div>
             <ul style='list-style-type:none'>
                 <li>
-                <a href="#" onclick="javascript:$('#reply_cmnt_{{ id }}').toggle();return false;">Reply</a>&nbsp;|
+                {{#status}}
+                    <a href="#" onclick="javascript:$('#reply_cmnt_{{ id }}').toggle();return false;">Reply</a>&nbsp;|
+                {{/status}}
                 {{#is_owner}}
-                    <a class="edit_msg" data-id="{{ id }}"  id="edit_cmnt_{{ id }}" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> &nbsp;
-                    <a class="del_msg_cmnt" data-id="{{ id }}" id="del_cmnt_{{ id }}" href="#"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+                    {{#status}}
+                        <a class="edit_msg" data-id="{{ id }}"  id="edit_cmnt_{{ id }}" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> &nbsp;
+                        <a class="del_msg_cmnt" data-id="{{ id }}" id="del_cmnt_{{ id }}" href="#"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+                    {{/status}}
                 {{/is_owner}}
                 <div class="row" id="reply_cmnt_{{ id }}" style="display:none;margin-top:10px;margin-left:15px">
                     {{#user_id}}
