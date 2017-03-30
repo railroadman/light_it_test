@@ -1,6 +1,5 @@
 class MyNode(dict):
     def __init__(self, msg, root_parent_id, parent=0, user_id=None):
-
         self._parent = None
         self['root_parent_id'] = root_parent_id
         self['message'] = msg.comment_txt
@@ -25,7 +24,6 @@ class MyNode(dict):
 
     def set_parent(self, node):
         self._parent = node
-
         node['childrens'].append(self)
 
 
@@ -37,15 +35,11 @@ def build_from_db(data, root_parent_id, user_id=None):
         if this is None:
             this = MyNode(d, user_id=user_id, root_parent_id=root_parent_id)
             lookup[d.id] = this
-
         if d.id != d.parent_id:
-
             if lookup.has_key(d.parent_id) is True:
                 parent = lookup[d.parent_id]
             else:
-                # create parent, if missing
                 parent = MyNode(d, parent=1, user_id=user_id, root_parent_id=root_parent_id)
                 lookup[d.parent_id] = parent
             this.set_parent(parent)
-
     return lookup
